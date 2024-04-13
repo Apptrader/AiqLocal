@@ -10,6 +10,7 @@ const ConfirmSubscriptionModal = ({ prod, setShowConfirmSubModal }) => {
   const { name, details } = prod;
   console.log(details)
   const [newPlan, setNewPlan] = useState({
+    referred: "",
     name: prod.name || "",
     price: details.price || "",
     price2: details.price2 || "",

@@ -7,15 +7,23 @@ const stripe = new Stripe(SSK);
 
 export const handlePayment = async (req, res) => {
     const { product, customerInfo } = req.body;
-    const { name, email } = customerInfo;
+    const { name, email, id } = customerInfo;
     console.log(product, name, email);
 
     try {
-        // Crear el cliente en Stripe
-        const customer = await stripe.customers.create({
-            name: name,
-            email: email,
-        });
+        let customer;
+
+        // Verificar si el cliente ya existe en Stripe
+        try {
+            customer = await stripe.customers.retrieve(id);
+        } catch (error) {
+            // Si el cliente no existe, crearlo
+            customer = await stripe.customers.create({
+                name: name,
+                email: email,
+                id: id
+            });
+        }
 
         const currentDate = new Date();
 
@@ -46,17 +54,16 @@ export const handlePayment = async (req, res) => {
         res.json(error);
     }
 };
+
 export const handleSubscription = async (req, res) => {
     const { product, name } = req.body;
     console.log(product, name);
 
     try {
-
         const currentDate = new Date();
-
-        // Obtener el próximo mes
-        const nextMonth = new Date(currentDate);
-        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        
+        // Calcular el final del período de prueba en 30 días
+        const trialEnd = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 días en milisegundos
 
         const session = await stripe.checkout.sessions.create({
             line_items: [
@@ -67,8 +74,11 @@ export const handleSubscription = async (req, res) => {
             ],
             mode: 'subscription',
             payment_method_types: ['card'],
-            success_url: `${FRONTEND_URL}/payment/success`, 
+            success_url: `${FRONTEND_URL}/payment/successSub`, 
             cancel_url: `${FRONTEND_URL}/payment/cancel`,
+            subscription_data: {
+                trial_end: Math.floor(trialEnd.getTime() / 1000)
+            }
         });
         res.json(session);
     } catch (error) {
@@ -76,8 +86,6 @@ export const handleSubscription = async (req, res) => {
         res.json(error);
     }
 };
-
-
 
  
 

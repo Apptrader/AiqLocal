@@ -99,7 +99,7 @@ sequelize.sync({ force: false })
     await createDefaultUser();
     await createRanks()
     await videoLanguage()
-    const privateKey = fs.readFileSync('./../certificados/private.key', 'utf8');
+/*     const privateKey = fs.readFileSync('./../certificados/private.key', 'utf8');
 const certificate = fs.readFileSync('./../certificados/certificate.crt', 'utf8');
 const ca = fs.readFileSync('./../certificados/ca_bundle.crt', 'utf8');
 
@@ -110,19 +110,18 @@ const credentials = {
 };
 
 // Crea un servidor HTTPS utilizando Express
-const httpsServer = https.createServer(credentials, app);
+ const httpsServer = https.createServer(credentials, app);
 
 // Escucha en el puerto 443 (puerto predeterminado para HTTPS)
 httpsServer.listen(443, () => {
   console.log('Servidor HTTPS está escuchando en el puerto 443');
-});
+});  */
 
-
-    /* const port = 80;
+     const port = 80;
     app.listen(port, () => {
       console.log(`Servidor escuchando en http://localhost:${port}`);
-    }); */
-  })
+    }); 
+  }) 
   .catch((error) => {
     console.error('Error al sincronizar modelos con la base de datos:', error);
   });

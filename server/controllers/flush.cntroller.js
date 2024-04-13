@@ -32,29 +32,29 @@ export const getNextWeekFlush = async (req, res) => {
 
         // Función recursiva para buscar referidos y sumar los flush
         const sumFlushAmounts = async (userCode) => {
-            console.log(userCode, "usercode");
             // Buscar todos los referidos directos del usuario actual
             const directReferrals = await User.findAll({
                 where: { CodeReferenced: userCode }
             });
-
+        
             let totalFlushAmount = 0;
-
+        
             // Sumar los montos de flush de los referidos directos
             for (const referral of directReferrals) {
-                console.log(referral.idUser, "IDuSER");
                 const flush = await Flush.findAll({
                     where: { user_id: referral.idUser }
                 });
-
+        
                 for (const element of flush) {
                     totalFlushAmount += element.dataValues.amount;
                 }
-
+        
                 // Llamada recursiva para buscar referidos de este referido
-                totalFlushAmount += await sumFlushAmounts(referral.UserCode);
+                if (referral.UserCode !== userCode) { // Evitar procesamiento del mismo usuario
+                    totalFlushAmount += await sumFlushAmounts(referral.UserCode);
+                }
             }
-
+        
             return totalFlushAmount;
         };
 

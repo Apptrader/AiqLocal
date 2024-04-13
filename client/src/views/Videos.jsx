@@ -13,6 +13,8 @@ const Videos = () => {
   const [hasPlan, setHasPlan] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  console.log(user)
+
   useEffect(() => {
     setIsLoggedIn(!!user);
     if (user && !user.idPaidPlan) {

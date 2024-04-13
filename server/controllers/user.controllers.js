@@ -339,6 +339,7 @@ export const updateUserPlan = async (req, res) => {
   const { plan } = req.body
   const { id } = req.user
   console.log(plan, "plandetails")
+  console.log("holas")
 
 
 
@@ -347,13 +348,24 @@ export const updateUserPlan = async (req, res) => {
 
 
     if (plan.referred.length === 0) {
-
+      console.log("no referido")
+      let referencedUser = await User.findOne({ where: { UserCode: 912004 } })
       console.log(plan.referred.length, "plan22")
+      const newReferralCount = referencedUser.referralsCount + 1;
+      let position = '';
+
+      if (newReferralCount % 2 === 0) {
+        position = 'right';
+      } else {
+        position = 'left';
+      }
+
       const result = await User.update(
         {
           idPaidPlan: plan.id,
           status: 1,
-          position: "",
+          position: position,
+          CodeReferenced: 912004
         },
         { where: { idUser: id } }
       );
@@ -367,6 +379,7 @@ export const updateUserPlan = async (req, res) => {
           { model: Rank, attributes: ['id', 'name', "right", "left"] }
         ]
       })
+      
 
 
       if (result[0] === 1 && plan) {
@@ -377,7 +390,7 @@ export const updateUserPlan = async (req, res) => {
       }
     } else {
 
-
+      console.log("referido")
       let referencedUser = await User.findOne({ where: { UserCode: plan.referred } });
 
       const newReferralCount = referencedUser.referralsCount + 1;
@@ -508,6 +521,98 @@ export const updateUserPlan = async (req, res) => {
   }
 
 
+}
+
+export const updateUserPlanSub = async (req, res) => {
+  const { plan } = req.body
+  const { id } = req.user
+  console.log(plan, "plandetails")
+
+  try {
+    if (plan.referred.length === 0) {
+      let referencedUser = await User.findOne({ where: { UserCode: 912004 } })
+      const newReferralCount = referencedUser.referralsCount + 1;
+
+      let position = '';
+
+      if (newReferralCount % 2 === 0) {
+        position = 'right';
+      } else {
+        position = 'left';
+      }
+      const result = await User.update(
+        {
+          idPaidPlan: plan.id,
+          status: 1,
+          position: position,
+          CodeReferenced: 912004
+        },
+        { where: { idUser: id } })
+
+
+        const userFound = await User.findOne({
+          where: {
+            idUser: id
+          },
+          include: [
+            { model: PaidPlan, attributes: ['idPaidPlan', 'planName',] },
+            { model: Rank, attributes: ['id', 'name', "right", "left"] }
+          ]
+        });
+
+        console.log(result[0], "result")
+  
+
+        if (result[0] === 1) {
+          await sendEmailPaidPlan(userFound.Email, userFound.UserName, userFound.idPaidPlan)
+          res.json({ updated: "ok", userFound })
+        } else {
+          res.json("Error")
+        }
+
+
+    } else {
+      let referencedUser = await User.findOne({ where: { UserCode: plan.referred } })
+      const newReferralCount = referencedUser.referralsCount + 1;
+
+      let position = '';
+
+      if (newReferralCount % 2 === 0) {
+        position = 'right';
+      } else {
+        position = 'left';
+      }
+      const result = await User.update(
+        {
+          idPaidPlan: plan.id,
+          status: 1,
+          position: position,
+        },
+        { where: { idUser: id } })
+
+        const userFound = await User.findOne({
+          where: {
+            idUser: id
+          },
+          include: [
+            { model: PaidPlan, attributes: ['idPaidPlan', 'planName',] },
+            { model: Rank, attributes: ['id', 'name', "right", "left"] }
+          ]
+        });
+        console.log(result)
+  
+        if (result[0] === 1) {
+          await sendEmailPaidPlan(userFound.Email, userFound.UserName, userFound.idPaidPlan)
+          res.json({ updated: "ok", userFound })
+        } else {
+          res.json("Error")
+        }
+    }
+
+    
+  } catch (error) {
+    
+  }
 }
 
 

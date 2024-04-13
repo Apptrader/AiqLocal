@@ -8,24 +8,25 @@ import getParamsEnv from '../functions/getParamsEnv';
 
 const { API_URL_BASE } = getParamsEnv();
 
-const PaymentSuccessComponent = () => {
+const PaymentSuccessSubComponent = () => {
   const navigate = useNavigate();
   const plan = useSelector((state) => state?.plan);
   const token = useSelector((state) => state?.user.token);
   const dispatch = useDispatch();
 
   console.log(plan, "this is the plan")
+  console.log()
 
   // UseRef para almacenar el estado de la bandera
   const updateUserPlanRequested = useRef(false);
 
   useEffect(() => {
-    console.log("PaymentSuccessComponent renderizado");
+    console.log("Sub renderizado");
 
     const updateUserPlan = async () => {
       try {
         const response = await axios.post(
-          `${API_URL_BASE}/apiUser/updateUserPlan`,
+          `${API_URL_BASE}/apiUser/updateUserPlanSub`,
           { plan },
           {
             headers: {
@@ -37,11 +38,12 @@ const PaymentSuccessComponent = () => {
         console.log(response.data, "en paid")
 
         if (response.data.updated === "ok") {
-          console.log("okey")
+        
           const updateUser = {
             token: token,
             userFound: response.data.userFound
           }
+          console.log(updateUser)
           dispatch(setUser(updateUser))
         } else {
           console.log("Not okay");
@@ -57,7 +59,7 @@ const PaymentSuccessComponent = () => {
       updateUserPlan();
     }
 
-  }, [])
+  }, [token])
 
   return (
     <div>
@@ -76,4 +78,4 @@ const PaymentSuccessComponent = () => {
   );
 };
 
-export default PaymentSuccessComponent;
+export default PaymentSuccessSubComponent;

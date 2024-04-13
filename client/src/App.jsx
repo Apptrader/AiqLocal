@@ -21,9 +21,10 @@ import ChaptersPanelView from './views/ChapterPanelView.jsx';
 import PaidPlanPanelView from './views/PaidPlansPanelView.jsx'
 import TermsAndConditions from './views/TermsAndCondition.jsx';
 import UserControlPanel from './views/UserControlPaner.jsx';
+import PaymentSuccessSubComponent from './components/PaymentSuccesSub.jsx';
 
 
-const {API_URL_BASE, VITE_USER_PANEL, VITE_LOGIN_USER, VITE_HOME, VITE_PAID_PLANS_REGISTER, VITE_PAID_PLAN_LIST,
+const {API_URL_BASE,VITE_PAYMENT_SUCCES_SUB, VITE_USER_PANEL, VITE_LOGIN_USER, VITE_HOME, VITE_PAID_PLANS_REGISTER, VITE_PAID_PLAN_LIST,
   VITE_REGISTER_USER, VITE_PROFILE, VITE_PAYMENT_SUCCES, VITE_ALL_VIDEOS,
   VITE_AIQ_BONUS_PLAN, VITE_ABOUT, VITE_CONTACT, VITE_NODE_PROFILE, VITE_ROOT, VITE_REGISTER, VITE_USERS, VITE_VIDEOS_PANEL, VITE_PLANS_PANEL, VITE_NEO_TECH_AI_ROBOT, VITE_CHAPTERS_PANEL, VITE_TERMS_AND_CONDITION} = getParamsEnv()
 
@@ -42,6 +43,7 @@ function App() {
         <Route path={VITE_REGISTER_USER} element={<RegisterUser />}></Route>
         <Route path={VITE_PROFILE} element={<UserProfileComponent />}></Route>
         <Route path={VITE_PAYMENT_SUCCES} element={<PaymentSuccesComponent />}></Route>
+        <Route path={VITE_PAYMENT_SUCCES_SUB} element={<PaymentSuccessSubComponent />}></Route>
         <Route path={VITE_ALL_VIDEOS} element={<Videos/>}></Route>
         {/*  <Route path='/payment/cancel' element={<PaymentCancelComponent />}></Route> */}
         <Route path={VITE_AIQ_BONUS_PLAN} element={<AiqBonusPlan />}></Route>

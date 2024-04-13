@@ -69,7 +69,7 @@ async function crearSuscripcionConMetodoDePago(customerId, priceId, paymentMetho
       const subscription = await stripe.subscriptions.create({
           customer: customerId,
           items: [{ price: priceId }],
-          trial_period_days: 30
+         /*  trial_period_days: 30 */
       });
 
       console.log('Suscripción creada con método de pago:', subscription);
@@ -118,45 +118,69 @@ app.post(
         const paymentIntent = event.data.object;
         customer = paymentIntent.customer
         payMethod = paymentIntent.payment_method
-       /*  if (paymentIntent.amount === 60000) {
+        if (paymentIntent.amount === 60000) {
           await crearSuscripcionConMetodoDePago(customer, "price_1P2MQQCtqRjqS5chcgCR4WJ2", payMethod)
         } else if(paymentIntent.amount === 25000) {
           await crearSuscripcionConMetodoDePago(customer, "price_1P2MPqCtqRjqS5chqiRgs0jA", payMethod)
         } else if (paymentIntent.amount === 15000) {
           await crearSuscripcionConMetodoDePago(customer, "price_1P2LOSCtqRjqS5ch03lA7nKo", payMethod)
-        } */
+        }
 
-        if (paymentIntent.amount === 60000) {
+        /* if (paymentIntent.amount === 60000) {
           await crearSuscripcionConMetodoDePago(customer, "price_1P4XNOIrqUJwwaEOzJfiunHk", payMethod)
         } else if(paymentIntent.amount === 25000) {
           await crearSuscripcionConMetodoDePago(customer, "price_1P4XN7IrqUJwwaEO74KcP17W", payMethod)
         } else if (paymentIntent.amount === 15000) {
           await crearSuscripcionConMetodoDePago(customer, "price_1P4XLgIrqUJwwaEOjHD2sGNq", payMethod)
-        }
+        } */
 
       case "charge.succeeded":
          payMethod = event.data.object.payment_method;
-        resData= payMethod
+         stripe.paymentIntents.retrieve(
+          event.data.object.id,
+          function(err, paymentIntent) {
+              if (err) {
+                  console.error("Error al recuperar la información del pago:", err);
+                  // Maneja el error de alguna manera adecuada
+              } else {
+                  console.log("Información del pago:", paymentIntent);
+                  
+              }
+          }
+      );
+         /* stripe.customers.retrieve(
+          event.data.object.customer,
+          function(err, customer) {
+              if (err) {
+                  console.error("Error al recuperar la información del cliente:", err);
+                  // Maneja el error de alguna manera adecuada
+              } else {
+                  console.log("Información del cliente:", customer);
+                  // Aquí puedes acceder a toda la información del cliente
+                  resData = customer;
+              }
+          }
+      ); */
         break;
       case "customer.created":
         customer = event.data.object
         break
       case "customer.subscription.created":
         const subscription = event.data.object;
-        resData = { message: `Subscription for ${subscription.id} was Created!`, sub: subscription };
         subId = subscription.id; 
         subPlanId = subscription.plan.id
+
         break;
       case 'checkout.session.completed':
-        resData = event.data.object
+       /*  resData = event.data.object */
         break;
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
 
-    console.log(resData);
+;
 
-    return response.status(200).send(resData);
+ /*    return response.status(200).send(resData); */
   }
 );
 
