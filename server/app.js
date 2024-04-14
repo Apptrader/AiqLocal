@@ -69,7 +69,7 @@ async function crearSuscripcionConMetodoDePago(customerId, priceId, paymentMetho
       const subscription = await stripe.subscriptions.create({
           customer: customerId,
           items: [{ price: priceId }],
-         /*  trial_period_days: 30 */
+          trial_period_days: 30
       });
 
       console.log('Suscripción creada con método de pago:', subscription);

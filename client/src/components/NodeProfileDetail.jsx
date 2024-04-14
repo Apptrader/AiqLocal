@@ -10,10 +10,6 @@ const NodeProfileDetail = ({ rankNames, userInfo }) => {
   const [rank, setRank] = useState(null);
   const [flush, setFlush] = useState(null)
 
-
-
-  console.log(userInfo)
-
   const totalNodos = useSelector((state) => state?.nodes)
 
 
@@ -27,7 +23,6 @@ const NodeProfileDetail = ({ rankNames, userInfo }) => {
       try {
         const response = await axios.post(`${API_URL_BASE}/api/rank/getNextRankByIdNode`, { id: userInfo.idUser});
         const result = response.data;
-        console.log(result);
         setNextRank(result.nextRank);
         setRank(result.rank)
       } catch (error) {

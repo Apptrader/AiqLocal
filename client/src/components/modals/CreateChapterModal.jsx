@@ -76,10 +76,8 @@ const CreateChapterModal = ({
                 }
 
                 const response = await axios.post(`${API_URL_BASE}/apiChapters/createChapter`, data);
-                console.log(response.data.created)
                 if (response.data.created === "ok") {
                     closeModal()
-                    console.log("created")
                     setSubmitLoader(false);
                     setAux(!aux);
                 } else {

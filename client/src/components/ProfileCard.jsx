@@ -9,7 +9,6 @@ const ProfileCard = ({ userInfo, rankNames, referred }) => {
   const totalNodos = useSelector((state) => state?.nodes)
 
 
-  console.log(userInfo, "referido")
   let amount;
   if (userInfo.idPaidPlan === 1) {
     amount = "Basic";

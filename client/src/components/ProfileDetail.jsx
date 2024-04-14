@@ -9,8 +9,6 @@ const ProfileDetail = ({ rankNames, userInfo, token }) => {
   const [nextRank, setNextRank] = useState(null);
   const [flush, setFlush] = useState(null)
 
-  console.log(userInfo)
-
   const totalNodos = useSelector((state) => state?.nodes)
 
 
@@ -29,7 +27,6 @@ const ProfileDetail = ({ rankNames, userInfo, token }) => {
           }
         });
         const result = response.data;
-        console.log(result);
         setNextRank(result);
       } catch (error) {
         console.error('Error al obtener el siguiente rango:', error);

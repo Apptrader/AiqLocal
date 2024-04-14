@@ -69,7 +69,7 @@ const PaidPlansTable = () => {
   };
 
   const handleDeleteModal = (id) => {
-    console.log(id, "id")
+   
     setDeletePlan(id)
     setShowConfirmation(true)
   }
@@ -91,7 +91,7 @@ const PaidPlansTable = () => {
   const handleShowCreateModal = () => {
     setShowCreatePlanModal(true);
   };
-  console.log(paidPlans)
+ 
   if (!isLoading) {
     return (
       <>

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {allUsers, logout, login, register, profile, getReferralTree,updateUserPlanSub, updateUserPlan, getUserByUserCode, calculate, updateUser, updateUserByAdmin, deleteUser, forgotPassword } from '../controllers/user.controllers.js'
+import {allUsers, logout, login, register, profile, getUserById,  getReferralTree,updateUserPlanSub, updateUserPlan, getUserByUserCode, calculate, updateUser, updateUserByAdmin, deleteUser, forgotPassword } from '../controllers/user.controllers.js'
 import {authRequired} from '../middlewares/validateToken.js'
 
 const routerUser = Router();
@@ -8,6 +8,7 @@ routerUser.post("/login", login)
 routerUser.post("/logout", logout)
 routerUser.post("/register", register)
 routerUser.get("/users", allUsers)
+routerUser.get("/getUserById", authRequired,  getUserById)
 routerUser.get("/profile", authRequired, profile)
 routerUser.get("/referralTree", authRequired, getReferralTree)
 routerUser.post("/updateUserPlan", authRequired, updateUserPlan)

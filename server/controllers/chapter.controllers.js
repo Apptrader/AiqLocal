@@ -10,7 +10,7 @@ export const allChapters = async (req, res) => {
                 attributes: ['name', 'id'], // Especificar los atributos que deseas obtener de VideoLanguage
             }]
         });
-        console.log(chapters, "capitulos");
+       
         res.status(200).json(chapters);
     } catch (error) {
         console.error('Error al obtener los capítulos:', error);
@@ -20,7 +20,7 @@ export const allChapters = async (req, res) => {
 
 export const createChapter = async (req, res) => {
     const { name, language_id } = req.body; // Extraer los datos necesarios del cuerpo de la solicitud
-    console.log(language_id, "idioma")
+
     try {
         // Crear un nuevo capítulo con los datos proporcionados
         const newChapter = await VideoChapter.create({
@@ -29,7 +29,7 @@ export const createChapter = async (req, res) => {
         });
 
         // Si necesitas guardar explícitamente el capítulo, Sequelize ya lo hace automáticamente al crearlo
-        console.log(newChapter)
+    
         res.status(201).json({newChapter, created: "ok"}); // Respondemos con el nuevo capítulo creado
     } catch (error) {
         console.log("Este es el error: ", error);

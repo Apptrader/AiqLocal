@@ -23,8 +23,6 @@ const LogInUserComponent = () => {
   const [errors, setErrors] = useState({});
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false); // State to manage visibility of forgot password modal
 
-  console.log(`${API_URL_BASE}/apiUser/login`)
-
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -82,7 +80,7 @@ const LogInUserComponent = () => {
   };
 
   const handleForgotPassword = () => {
-    console.log("asdasdas")
+
     
       setShowForgotPasswordModal(true);
     

@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 
 export const getNextWeekFlush = async (req, res) => {
     const { id } = req.body;
-    console.log(id);
+
 
     try {
         // Buscar al usuario con el id proporcionado
@@ -20,7 +20,6 @@ export const getNextWeekFlush = async (req, res) => {
          }
         });
     
-        console.log(flush)
     
         let sumaMontos = 0;
     
@@ -61,7 +60,6 @@ export const getNextWeekFlush = async (req, res) => {
         // Llamar a la función recursiva para obtener el total de los montos de flush
         const totalFlush = await sumFlushAmounts(user.UserCode);
         const finalFlush = totalFlush + firstflush
-        console.log(finalFlush)
         res.status(200).json(finalFlush);
     } catch (error) {
         console.error("Error:", error);

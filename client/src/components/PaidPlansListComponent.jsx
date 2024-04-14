@@ -15,16 +15,14 @@ import { useSelector } from "react-redux";
 
 
 const { API_URL_BASE } = getParamsEnv()
- 
 
-const PaidPlansListComponent = ({user}) => {
+
+const PaidPlansListComponent = ({ user }) => {
   const [plans, setPlans] = useState([]);
   const [clientSecret, setClientSecret] = useState("null")
   const [showStripeCard, setShowStripeCard] = useState(false)
   const [PSK, setPSK] = useState(null)
   const token = useSelector((state) => state?.user.token);
-
-  console.log(user, "suario en plans")
 
   const initialPackageStates = {
     BASIC: { selected: true, details: ['Access to Learning and Training Videos', 'Market BUY&SELL Alerts', 'Forex Daily Alerts'], price: 150, id: 1, bonus: 30, renewal: 60 },
@@ -71,7 +69,7 @@ const PaidPlansListComponent = ({user}) => {
   }
 
   const handlePaymentConfirm2 = (product, name) => {
-    setSubscription({
+    setProduct({
       name: "Pro",
       details: { price: "price_1P3jfqCtqRjqS5ch6ZFOvkIv", id: 2, bonus: 60, renewal: 85 },
       customerInfo: {
@@ -119,8 +117,6 @@ const PaidPlansListComponent = ({user}) => {
 
   const partnerImageClass = 'max-w-[150px]'
 
-  console.log(product, "producto")
-
   const handleSubConfirm1 = (product, name) => {
     setSubscription({
       name: "Basic",
@@ -167,7 +163,7 @@ const PaidPlansListComponent = ({user}) => {
         <div className='bg-black px-4 md:px-8 lg:px-16 xl:px-32 font-bold pt-24 m-auto'>
           <h1 className=' text-center text-white text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-6'>Packages</h1>
           <div className='flex flex-col md:flex-row gap-10 mx-auto max-w-7xl justify-center pt-16'>
-       
+
             <div className="flex items-center flex-col max-w-full md:max-w-[280px] gap-5 md:mx-auto">
               <img className='animate__animated animate__fadeInLeft' src="https://res.cloudinary.com/doqyrz0sg/image/upload/v1706129388/aiqplan1_b5df6y.webp" alt="img 1" />
               <div className="flex flex-col ml-5 text-center">
@@ -192,7 +188,7 @@ const PaidPlansListComponent = ({user}) => {
               </div>
             </div>
 
-       
+
             <div className="flex items-center flex-col max-w-full md:max-w-[280px] font-bold md:mx-auto">
               <img className='animate__animated animate__fadeInLeft rounded' src="https://res.cloudinary.com/doqyrz0sg/image/upload/v1706129395/aiqplan2_nexhqu.webp" alt="img 1" />
               <div className="flex flex-col ml-5 text-center">
@@ -229,7 +225,7 @@ const PaidPlansListComponent = ({user}) => {
               </div>
             </div>
 
-          
+
             <div className="flex items-center flex-col max-w-full md:max-w-[280px] md:mx-auto">
               <img className='animate__animated animate__fadeInLeft rounded' src="https://res.cloudinary.com/doqyrz0sg/image/upload/v1706129401/aiqplan3_k64hky.webp" alt="img 1" />
               <div className="flex flex-col ml-5 text-center">
@@ -280,38 +276,37 @@ const PaidPlansListComponent = ({user}) => {
           </div>
 
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-2/3 m-auto pt-20">
-         
-          <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Basic</h2>
-            <button onClick={handleSubConfirm1} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
+        {user.onlySubs && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-2/3 m-auto pt-20">
+            <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Basic</h2>
+              <button onClick={handleSubConfirm1} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
+            <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Pro</h2>
+              <button onClick={handleSubConfirm2} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
+            <div className="bg-black border border-1px border-blue-600 shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Sonic</h2>
+              <button onClick={handleSubConfirm3} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
           </div>
-          
-          <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Pro</h2>
-            <button onClick={handleSubConfirm2} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
-          </div>
-         
-          <div className="bg-black border border-1px border-blue-600 shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Sonic</h2>
-            <button onClick={handleSubConfirm3} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
-          </div>
-        </div>
+        )}
         <PartnersComponent />
 
         <FooterComponent />
       </div>
       {
-  showConfirmPayModal && product && (
-      <ConfirmPayModal prod={product} setShowConfirmPayModal={setShowConfirmPayModal} setShowStripeCard={setShowStripeCard} setClientSecret={setClientSecret} />
-  )
-}
+        showConfirmPayModal && product && (
+          <ConfirmPayModal prod={product} setShowConfirmPayModal={setShowConfirmPayModal} setShowStripeCard={setShowStripeCard} setClientSecret={setClientSecret} />
+        )
+      }
       {
         showConfirmSubModal && subscription && (
           <ConfirmSubscriptionModal prod={subscription} setShowConfirmSubModal={setShowConfirmSubModal} />
@@ -390,7 +385,7 @@ const PaidPlansListComponent = ({user}) => {
   }
 
   const handlePaymentConfirm2 = (product, name) => {
-    setSubscription({
+    setProduct({
       name: "Pro",
       details: { price: "price_1P4XJnIrqUJwwaEO9YIyuvXB", id: 2, bonus: 60, renewal: 85 },
       customerInfo: {
@@ -580,29 +575,28 @@ const PaidPlansListComponent = ({user}) => {
           </div>
 
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-2/3 m-auto pt-20">
-          
-          <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Basic</h2>
-            <button onClick={handleSubConfirm1} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
+        {user.onlySubs && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-2/3 m-auto pt-20">
+            <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Basic</h2>
+              <button onClick={handleSubConfirm1} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
+            <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Pro</h2>
+              <button onClick={handleSubConfirm2} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
+            <div className="bg-black border border-1px border-blue-600 shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Sonic</h2>
+              <button onClick={handleSubConfirm3} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
           </div>
-         
-          <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Pro</h2>
-            <button onClick={handleSubConfirm2} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
-          </div>
-         
-          <div className="bg-black border border-1px border-blue-600 shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Sonic</h2>
-            <button onClick={handleSubConfirm3} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
-          </div>
-        </div>
+        )}
         <PartnersComponent />
 
         <FooterComponent />

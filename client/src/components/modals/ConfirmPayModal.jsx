@@ -25,8 +25,6 @@ const ConfirmPayModal = ({ prod, setShowConfirmPayModal, elements, setClientSecr
   const [referredName, setReferredName] = useState("");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-  console.log(customerInfo)
-
 
   const dispatch = useDispatch();
 
@@ -69,7 +67,6 @@ const ConfirmPayModal = ({ prod, setShowConfirmPayModal, elements, setClientSecr
         customerInfo
       });
 
-      console.log(response.data);
 
       window.location.href = response.data.url;
 

@@ -14,14 +14,10 @@ const PaymentSuccessSubComponent = () => {
   const token = useSelector((state) => state?.user.token);
   const dispatch = useDispatch();
 
-  console.log(plan, "this is the plan")
-  console.log()
-
   // UseRef para almacenar el estado de la bandera
   const updateUserPlanRequested = useRef(false);
 
   useEffect(() => {
-    console.log("Sub renderizado");
 
     const updateUserPlan = async () => {
       try {
@@ -35,15 +31,13 @@ const PaymentSuccessSubComponent = () => {
           }
         );
 
-        console.log(response.data, "en paid")
-
         if (response.data.updated === "ok") {
         
           const updateUser = {
             token: token,
             userFound: response.data.userFound
           }
-          console.log(updateUser)
+
           dispatch(setUser(updateUser))
         } else {
           console.log("Not okay");

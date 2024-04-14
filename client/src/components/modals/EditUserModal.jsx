@@ -20,6 +20,7 @@ const EditUserModal = ({
         onlySubs: editUser.onlySubs || false,
         elegibility: editUser.elegibility || false
     });
+    const [originalUserCode, setOriginalUserCode] = useState(editUser.UserCode || ""); // Estado para almacenar el User Code original
 
     const [errors, setErrors] = useState({});
     const [submitLoader, setSubmitLoader] = useState(false);
@@ -81,11 +82,15 @@ const EditUserModal = ({
                 setSubmitLoader(true);
 
                 const data = {
-                    UserCode: parseInt(user.UserCode),
                     onlySubs: user.onlySubs,
                     elegibility: user.elegibility,
                     id: editUser.idUser
                 };
+
+                // Agregar UserCode a data solo si ha cambiado
+                if (originalUserCode !== user.UserCode) {
+                    data.UserCode = parseInt(user.UserCode);
+                }
 
                 const response = await axios.put(`${API_URL_BASE}/apiUser/updateByAdmin`, data, {
                     headers: {
@@ -93,27 +98,23 @@ const EditUserModal = ({
                     }
                 });
 
-                console.log(response, "respuesta")
-
                 if (response.data.updated === "ok") {
                     closeModal()
-                    console.log("hola2")
                     setSubmitLoader(false);
                 } else {
-                    toast.error("succes")
+                    toast.error("Error updating user");
                     setDisableSubmit(false);
                     setSubmitLoader(false);
                     // Error handling if creation was not successful
                 }
             } catch (error) {
+                toast.error("An error occurred while updating user");
                 setDisableSubmit(false);
                 setSubmitLoader(false);
                 // Error handling if there's any issue with the request
             }
         }
     };
-    console.log(userToken)
-    console.log(user)
 
     return (
         <>

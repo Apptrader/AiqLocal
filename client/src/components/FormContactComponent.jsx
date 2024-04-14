@@ -26,7 +26,6 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form data submitted:', formData);
 
     try {
       const response = await axios.post(
@@ -39,9 +38,6 @@ const ContactForm = () => {
           },
         }
       );
-      
-      console.log('Server response:', response.data);
-      // Puedes realizar acciones adicionales después de enviar el formulario
 
       if(response.data.sended === "ok") {
         toast.success("The email was sent successfully")

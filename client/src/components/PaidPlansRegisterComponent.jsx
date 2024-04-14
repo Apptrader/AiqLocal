@@ -26,7 +26,7 @@ const PaidPlansRegisterComponent =() =>{
     
         try {
           // Realizar la solicitud a tu servidor Node.js
-          console.log('Datos del formulario:', formData);
+        
           const response = await axios.post(`${API_URL_BASE}/apiPaidPlans/create`, formData, {
             withCredentials: true,
             headers: {
@@ -36,7 +36,7 @@ const PaidPlansRegisterComponent =() =>{
          
         
           // Manejar la respuesta del servidor según sea necesario
-          console.log('Respuesta del servidor:', response.data);
+        
         } catch (error) {
           console.error('Error al enviar datos al servidor:', error);
         }

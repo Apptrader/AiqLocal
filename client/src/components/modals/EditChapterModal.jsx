@@ -77,7 +77,6 @@ const   EditChapterModal = ({
                 }
 
                 const response = await axios.put(`${API_URL_BASE}/apiChapters/chapters/${editChapter.id}`, data);
-                console.log(response.data.created)
                 if (response.data.updated === "ok") {
                     closeModal()
                     console.log("updated")

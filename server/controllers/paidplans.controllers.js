@@ -64,7 +64,6 @@ export const deletePaidPlan = async (req, res) => {
 };
 
 export const updatePaidPlan = async (req, res) => {
-    console.log(req.params)
     try {
         const { planName, planCost, bonus, renewal, planImage} = req.body;
 

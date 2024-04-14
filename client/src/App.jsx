@@ -22,6 +22,11 @@ import PaidPlanPanelView from './views/PaidPlansPanelView.jsx'
 import TermsAndConditions from './views/TermsAndCondition.jsx';
 import UserControlPanel from './views/UserControlPaner.jsx';
 import PaymentSuccessSubComponent from './components/PaymentSuccesSub.jsx';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from './redux/actions.js';
+
 
 
 const {API_URL_BASE,VITE_PAYMENT_SUCCES_SUB, VITE_USER_PANEL, VITE_LOGIN_USER, VITE_HOME, VITE_PAID_PLANS_REGISTER, VITE_PAID_PLAN_LIST,
@@ -31,6 +36,37 @@ const {API_URL_BASE,VITE_PAYMENT_SUCCES_SUB, VITE_USER_PANEL, VITE_LOGIN_USER, V
 
 
 function App() {
+
+const token = useSelector((state) => state.user.token)
+const dispatch = useDispatch()
+
+
+
+useEffect(() => {
+  const getActualUser = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL_BASE}/apiUser/getUserById`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      console.log(response.data)
+      dispatch(setUser({
+        userFound: response.data.userFound,
+        token
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  if (token) {
+    getActualUser();
+  }
+}, [token]);
 
 
   return (

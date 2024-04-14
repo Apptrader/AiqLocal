@@ -72,7 +72,6 @@ const ChaptersTable = () => {
     setShowEditChapterModal(true)
   }
 
-  console.log(editChapter)
 
   return (
     <>

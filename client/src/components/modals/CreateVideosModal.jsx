@@ -60,8 +60,6 @@ const CreateVideoModal = ({
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        console.log(e.target.value)
         setVideo(prevState => ({
             ...prevState,
             [name]: value,

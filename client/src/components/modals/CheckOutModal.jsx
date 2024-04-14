@@ -37,7 +37,6 @@ const CheckOutModal = ({ setShowStripeCard, clientSecret }) => {
     if (error) {
       console.log('Error during payment:', error);
     } else {
-      console.log('Payment successful!');
       // Aquí puedes redirigir al usuario a la página de éxito
       window.location.href = VITE_PAYMENT_SUCCES;
     }

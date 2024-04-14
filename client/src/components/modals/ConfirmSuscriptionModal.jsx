@@ -8,7 +8,6 @@ const { API_URL_BASE, VITE_TERMS_AND_CONDITION } = getParamsEnv();
 
 const ConfirmSubscriptionModal = ({ prod, setShowConfirmSubModal }) => {
   const { name, details } = prod;
-  console.log(details)
   const [newPlan, setNewPlan] = useState({
     referred: "",
     name: prod.name || "",
@@ -43,8 +42,6 @@ const ConfirmSubscriptionModal = ({ prod, setShowConfirmSubModal }) => {
         name,
       });
 
-      console.log(response.data);
-
       window.location.href = response.data.url;
 
     } catch (error) {
@@ -58,7 +55,6 @@ const ConfirmSubscriptionModal = ({ prod, setShowConfirmSubModal }) => {
         userCode: userCode
       }
       const response = await axios.post(`${API_URL_BASE}/apiUser/getUserByUserCode`, data);
-      console.log(response.data, "referreds")
       setReferredName(response.data.UserName)
     } catch (error) {
       console.error('Error fetching referred user name:', error.message);
@@ -85,7 +81,6 @@ const ConfirmSubscriptionModal = ({ prod, setShowConfirmSubModal }) => {
     setAgreedToTerms(!agreedToTerms);
   };
 
-  console.log(newPlan)
 
   return (
     <div className="fixed z-20 top-0 left-0 flex items-center justify-center w-full h-full bg-black" style={{ background: "rgba(0, 0, 0, 0.70)" }}>

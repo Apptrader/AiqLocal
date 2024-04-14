@@ -73,6 +73,14 @@ const createPaidPlan = async (planData) => {
   try {
     const { planName, planCost, description, feature, planImage, bonus, renewal } = planData;
 
+    // Verifica si ya existe un plan con el mismo nombre
+    const existingPlan = await PaidPlan.findOne({ where: { planName } });
+
+    if (existingPlan) {
+      console.log(`Ya existe un plan con el nombre "${planName}". No se creará un nuevo plan.`);
+      return existingPlan;
+    }
+
     const newPlan = await PaidPlan.create({
       planName,
       planCost,
@@ -99,6 +107,37 @@ sequelize.sync({ force: false })
     await createDefaultUser();
     await createRanks()
     await videoLanguage()
+
+     
+    await createPaidPlan({
+      planName: 'Basic',
+      planCost: 150,
+      description: '',
+      feature: '',
+      planImage: '',
+      bonus: 35,
+      renewal: 60
+    });
+
+  await createPaidPlan({
+    planName: 'Pro',
+    planCost: 250,
+    description: '',
+    feature: '',
+    planImage: '',
+    bonus: 60,
+    renewal: 85
+  });
+
+  await createPaidPlan({
+    planName: 'Sonic',
+    planCost: 600,
+    description: '',
+    feature: '',
+    planImage: '',
+    bonus: 150,
+    renewal: 90
+  });
 /*     const privateKey = fs.readFileSync('./../certificados/private.key', 'utf8');
 const certificate = fs.readFileSync('./../certificados/certificate.crt', 'utf8');
 const ca = fs.readFileSync('./../certificados/ca_bundle.crt', 'utf8');
