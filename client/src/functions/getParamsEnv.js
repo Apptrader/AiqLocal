@@ -1,5 +1,5 @@
 export default function getParamsEnv() {
-    const API_URL_BASE = import.meta.env.VITE_BACKEND_URL || "http://localhost:80"
+    const API_URL_BASE = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:80"
     const VITE_HOME = import.meta.env.VITE_HOME || "/home"
     const VITE_LOGIN_USER = import.meta.env.VITE_LOGIN_USER || "/logInUser"
     const VITE_PAID_PLANS_REGISTER = import.meta.env.VITE_PAID_PLANS_REGISTER || "/paidPlansRegister"

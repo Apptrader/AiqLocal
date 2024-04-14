@@ -280,29 +280,29 @@ const PaidPlansListComponent = ({user}) => {
           </div>
 
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-2/3 m-auto pt-20">
-         
-          <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Basic</h2>
-            <button onClick={handleSubConfirm1} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
+        {user.onlySubs && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-2/3 m-auto pt-20">
+            <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Basic</h2>
+              <button onClick={handleSubConfirm1} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
+            <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Pro</h2>
+              <button onClick={handleSubConfirm2} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
+            <div className="bg-black border border-1px border-blue-600 shadow-lg p-6">
+              <h2 className="text-white text-xl font-bold mb-4">Only Subscription Sonic</h2>
+              <button onClick={handleSubConfirm3} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Buy Subscription
+              </button>
+            </div>
           </div>
-          
-          <div className="bg-black border border-1px border-blue-600 rounded-lg shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Pro</h2>
-            <button onClick={handleSubConfirm2} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
-          </div>
-         
-          <div className="bg-black border border-1px border-blue-600 shadow-lg p-6">
-            <h2 className="text-white text-xl font-bold mb-4">Only Subscription Sonic</h2>
-            <button onClick={handleSubConfirm3} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Buy Subscription
-            </button>
-          </div>
-        </div>
+        )}
+
         <PartnersComponent />
 
         <FooterComponent />

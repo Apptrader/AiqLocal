@@ -182,6 +182,12 @@ const UsersTable = () => {
                   Next Payment
                 </th>
                 <th scope="col" className="px-4 py-3">
+                  Eligibility
+                </th>
+                <th scope="col" className="px-4 py-3">
+                  Only Subs
+                </th>
+                <th scope="col" className="px-4 py-3">
                   <button
                     className="flex flex-row gap-1 p-2 rounded-full hover:bg-primaryPink hover:text-black"
                   ></button>
@@ -201,6 +207,9 @@ const UsersTable = () => {
                   <td className="px-4 py-4">{user.paidPlan && user.paidPlan.planName ? user.paidPlan.planName : "-"}</td>
                   <td className="px-4 py-4">{user.CodeReferenced}</td>
                   <td className="px-4 py-4">${user.payAmount}</td>
+                  <td className="px-4 py-4">{user.elegibility ? "True" : "False"}</td>
+                  <td className="px-4 py-4">{user.onlySubs ? "True" : "False"}</td>
+
                   <td className="px-4 py-4">
                     <button
                       className="hover:bg-blue-700 text-black px-2 py-1 rounded mr-2"

@@ -190,11 +190,11 @@ export const updateUserByAdmin = async (req, res) => {
     }
 
     // Actualiza los campos del usuario en la base de datos
-    await user.update(updateData);
+    const response = await user.update(updateData);
+  
 
     // Devuelve la respuesta con los datos actualizados
     res.json({
-      userFound: user,
       updated: 'ok',
       token
     });
@@ -340,8 +340,6 @@ export const updateUserPlan = async (req, res) => {
   const { id } = req.user
   console.log(plan, "plandetails")
   console.log("holas")
-
-
 
   try {
 

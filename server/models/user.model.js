@@ -109,8 +109,15 @@ const User = sequelize.define('user', {
   },
   elegibility: {
     type: DataTypes.BOOLEAN,
-    allowNull: true
+    allowNull: true,
+    defaultValue: false
+  },
+  onlySubs: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false
   }
+
 });
 
 User.beforeCreate((user, options) => {
