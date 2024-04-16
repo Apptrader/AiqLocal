@@ -7,6 +7,7 @@ import PaidPlan from '../models/paidplans.model.js';
 import nodemailer from 'nodemailer';
 import Flush from '../models/flush.model.js';
 import { where } from 'sequelize';
+import { Op } from 'sequelize';
 
 
 export const allUsers = async (req, res) => {
@@ -525,6 +526,7 @@ export const updateUserPlan = async (req, res) => {
     const { plan } = req.body;
     const { id } = req.user;
 
+    
     // Validar la entrada
     if (!plan || !id) {
       throw new Error('Datos de entrada inválidos.');
@@ -573,7 +575,8 @@ async function handlePlanWithoutReferral(userId, plan) {
           payAmount: newPayAmount,
           enrollmentVolume: enrollmentVolume,
           directRight: referencedUser.directRight + 1,
-          referralsCount: newReferralCount
+          referralsCount: newReferralCount,
+          totalGv: newPointsRight + referencedUser.pointsLeft
         },
         { where: { idUser: referencedUser.idUser } }
       );
@@ -593,7 +596,8 @@ async function handlePlanWithoutReferral(userId, plan) {
             payAmount: newPayAmount,
             enrollmentVolume: enrollmentVolume,
             directLeft: referencedUser.directLeft + 1,
-            referralsCount: newReferralCount
+            referralsCount: newReferralCount,
+            totalGv: newPointsLeft + referencedUser.pointsRight
           },
           { where: { idUser: referencedUser.idUser } }
         );
@@ -650,7 +654,7 @@ async function handlePlanWithoutReferral(userId, plan) {
     console.log("6")
 
     if (result[0] === 1 && plan) {
-      await sendEmailPaidPlan(userFound.Email, userFound.UserName, plan);
+      
     } else {
       throw new Error('Error al actualizar el plan del usuario.');
     }
@@ -661,6 +665,7 @@ async function handlePlanWithoutReferral(userId, plan) {
 
 async function handlePlanWithReferral(userId, plan) {
   try {
+    console.log("1")
     let referencedUser = await User.findOne({ where: { UserCode: plan.referred } });
     const newReferralCount = referencedUser.referralsCount + 1;
     const newPv = plan.bonus;
@@ -671,6 +676,8 @@ async function handlePlanWithReferral(userId, plan) {
     } else {
       position = 'left';
     }
+
+    console.log("12", position)
 
     const newPointsLeft = referencedUser.pointsLeft + newPv;
     const newPointsRight = referencedUser.pointsRight + newPv;
@@ -684,10 +691,12 @@ async function handlePlanWithReferral(userId, plan) {
           payAmount: newPayAmount,
           enrollmentVolume: enrollmentVolume,
           directRight: referencedUser.directRight + 1,
-          referralsCount: newReferralCount
+          referralsCount: newReferralCount,
+          totalGv: newPointsRight + referencedUser.pointsLeft
         },
         { where: { idUser: referencedUser.idUser } }
       );
+      console.log("123")
       await assignRank(referencedUser.idUser);
     } else {
       await User.update(
@@ -696,12 +705,15 @@ async function handlePlanWithReferral(userId, plan) {
           payAmount: newPayAmount,
           enrollmentVolume: enrollmentVolume,
           directLeft: referencedUser.directLeft + 1,
-          referralsCount: newReferralCount
+          referralsCount: newReferralCount,
+          totalGv: newPointsLeft + referencedUser.pointsRight
         },
         { where: { idUser: referencedUser.idUser } }
       );
       await assignRank(referencedUser.idUser);
     }
+
+   
 
     let user = referencedUser;
 
@@ -718,10 +730,26 @@ async function handlePlanWithReferral(userId, plan) {
           { pointsRight: newPoints },
           { where: { idUser: parentUser.idUser } }
         );
+        const upUser = await User.findOne(
+          { where: { idUser: parentUser.idUser } }
+        );
+
+        await User.update(
+          { totalGv: upUser.pointsRight + upUser.pointsLeft },
+          { where: { idUser: parentUser.idUser } }
+        );
       } else {
         const newPoints = parentUser.pointsLeft + plan.bonus;
         await User.update(
-          { pointsLeft: newPoints },
+          { pointsLeft: newPoints, totalGv: parentUser.totalGv + plan.bonus },
+          { where: { idUser: parentUser.idUser } }
+        );
+        const upUser = await User.findOne(
+          { where: { idUser: parentUser.idUser } }
+        );
+
+        await User.update(
+          { totalGv: upUser.pointsRight + upUser.pointsLeft },
           { where: { idUser: parentUser.idUser } }
         );
       }
@@ -770,6 +798,8 @@ async function handlePlanWithReferral(userId, plan) {
       date: new Date(),
       amount: amount
     });
+
+    
 
     await sendEmailPaidPlan(userFound.Email, userFound.UserName, userFound.idPaidPlan);
   } catch (error) {
@@ -981,9 +1011,8 @@ export const getUserById = async (req, res) => {
 
   try {
     const user = await User.findOne({
-      where: {
-        idUser: id
-      }
+      where: { idUser: id },
+      include: [{ model: Rank }]
     });
 
     if (!user) {
@@ -999,15 +1028,17 @@ export const getUserById = async (req, res) => {
 
 
 export const calculate = async (req, res) => {
+  const daysAgo = 0; // Cambia este número manualmente según tus necesidades
+  console.log(`entering calculation with ${daysAgo} days ago`)
   try {
     const users = await User.findAll({
       include: [{ model: Rank, attributes: ['id', 'name', 'commission', 'left', 'right'] }],
     });
 
     for (const user of users) {
-      if (user.rank && user.pointsLeft !== null && user.pointsRight !== null) {
+   
 
-        if (user.directLeft >= user.rank.left && user.directRight >= user.rank.right) {
+        if (user.directLeft >= user?.rank?.left && user.directRight >= user?.rank?.right) {
           const commissionPercentage = user.rank.commission; // Obtén el porcentaje de comisión del rango
 
           // Determina la pierna con menos puntos
@@ -1017,20 +1048,50 @@ export const calculate = async (req, res) => {
           // Calcula el monto de comisión
           const commissionAmount = (user[weakerLeg] * commissionPercentage) / 100;
 
-          // Actualiza el usuario
+          if(user.rank && user.pointsLeft !== null && user.pointsRight !== null && user.rank.name !== "BUILDER") {
+            await User.update(
+              {
+                payAmount: user.payAmount + commissionAmount,
+                [weakerLeg]: null,
+                [strongerLeg]: user[strongerLeg] - user[weakerLeg],
+              },
+              { where: { idUser: user.idUser } }
+            );
+          } 
+
+          // Busca todos los flushes del usuario con fecha días atrás o más
+          const daysAgoDate = new Date();
+          daysAgoDate.setDate(daysAgoDate.getDate() - daysAgo);
+
+          const userFlushes = await Flush.findAll({
+            where: {
+              user_id: user.idUser,
+              date: { [Op.lte]: daysAgoDate } // Filtra por fecha menor o igual a días atrás
+            }
+          });
+
+          // Calcula la suma de los montos de los flushes
+          const totalFlushAmount = userFlushes.reduce((total, flush) => total + flush.amount, 0);
+          console.log(totalFlushAmount)
+
+          // Actualiza el totalGv del usuario
           await User.update(
-            {
-              payAmount: user.payAmount + commissionAmount,
-              [weakerLeg]: null,
-              [strongerLeg]: user[strongerLeg] - user[weakerLeg],
-            },
+            { totalGv: user.totalGv - totalFlushAmount },
             { where: { idUser: user.idUser } }
           );
-        }
-      }
-    }
 
-    res.json({ calculated: "ok", message: 'Cálculos realizados con éxito.', });
+          // Elimina los flushes procesados
+          await Flush.destroy({
+            where: {
+              user_id: user.idUser,
+              date: { [Op.lte]: daysAgoDate }
+            }
+          });
+        
+      }
+    } 
+ 
+    res.json({ calculated: "ok", message: 'Cálculos realizados con éxito.', users });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Error en el servidor.' });

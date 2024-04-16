@@ -37,7 +37,7 @@ const {API_URL_BASE,VITE_PAYMENT_SUCCES_SUB, VITE_USER_PANEL, VITE_LOGIN_USER, V
 
 function App() {
 
-const token = useSelector((state) => state.user.token)
+const token = useSelector((state) => state?.user?.token)
 const dispatch = useDispatch()
 
 

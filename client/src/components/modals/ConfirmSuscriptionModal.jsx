@@ -7,7 +7,7 @@ import getParamsEnv from '../../functions/getParamsEnv';
 const { API_URL_BASE, VITE_TERMS_AND_CONDITION } = getParamsEnv();
 
 const ConfirmSubscriptionModal = ({ prod, setShowConfirmSubModal }) => {
-  const { name, details } = prod;
+  const { name, details, customerInfo } = prod;
   const [newPlan, setNewPlan] = useState({
     referred: "",
     name: prod.name || "",
@@ -22,6 +22,8 @@ const ConfirmSubscriptionModal = ({ prod, setShowConfirmSubModal }) => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   console.log(newPlan, "planNew")
+
+  console.log(customerInfo)
 
   const dispatch = useDispatch();
 

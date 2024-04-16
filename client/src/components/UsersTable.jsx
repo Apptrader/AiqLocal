@@ -49,8 +49,8 @@ const UsersTable = () => {
 
   const filteredUsers = users.filter((user) => {
     const nameMatch = user.UserName.toLowerCase().includes(filters.name.toLowerCase());
-    const userCodeMatch = user.UserCode.toString().includes(filters.userCode);
-    return nameMatch && userCodeMatch;
+  /*   const userCodeMatch = user.UserCode.toString().includes(filters.userCode); */
+    return nameMatch /* && userCodeMatch; */
   });
 
 
@@ -59,6 +59,7 @@ const UsersTable = () => {
     const response = await axios.post(`${API_URL_BASE}/apiUser/calculate`)
 
     if (response.data.calculated === "ok") {
+      console.log(response.data)
       setShowWeeklyCalculationModal(false)
     }
 

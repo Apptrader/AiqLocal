@@ -27,13 +27,15 @@ const ProfileDetail = ({ rankNames, userInfo, token }) => {
           }
         });
         const result = response.data;
+        console.log(response.data, "rank")
+        console.log("prueba12345")
         setNextRank(result);
       } catch (error) {
         console.error('Error al obtener el siguiente rango:', error);
       }
     };
 
-    if(userInfo.rank) {
+    if(userInfo.rank_id) {
       getNextRank();
     } else {
       setNextRank(
@@ -59,8 +61,9 @@ const ProfileDetail = ({ rankNames, userInfo, token }) => {
     getNextFlush();
   }, []);
 
+  console.log(userInfo)
 
-  const totalGV = userInfo.pointsLeft + userInfo.pointsRight;
+  const totalGV = userInfo.totalGv;
 
   if (totalNodos) {
 
@@ -99,20 +102,28 @@ const ProfileDetail = ({ rankNames, userInfo, token }) => {
             </li>
             {/* Los últimos cuatro en dos columnas */}
             <div className='grid grid-cols-2'>
+            <li className='flex flex-col p-2 items-center py-2 border-b-8 border-r-8 border-black'>
+                <span>Direct Left</span>
+                <span>{userInfo.directLeft || 0}</span>
+              </li>
+              <li className='flex flex-col p-2 items-center py-2 border-b-8 border-l-8 border-black'>
+                <span>Direct Right</span>
+                 <span>{userInfo.directRight || 0}</span>
+              </li>
               <li className='flex flex-col p-2 items-center py-2 border-b-8 border-r-8 border-black'>
-                <span>Active Left:</span>
+                <span>Active Left</span>
                 <span>{totalNodos.left}</span>
               </li>
               <li className='flex flex-col p-2 items-center py-2 border-b-8 border-l-8 border-black'>
-                <span>Active Right:</span>
+                <span>Active Right</span>
                  <span>{totalNodos.right}</span>
               </li>
               <li className='flex flex-col p-2 items-center py-2 border-b-8 border-r-8 border-black'>
-                <span>BV Left:</span>
+                <span>BV Left</span>
                 <span>{userInfo.pointsLeft || 0}</span>
               </li>
               <li className='flex flex-col p-2 items-center py-2 border-b-8 border-l-8 border-black'>
-                <span>BV Right:</span>
+                <span>BV Right</span>
                 <span>{userInfo.pointsRight || 0}</span>
               </li>
             </div>

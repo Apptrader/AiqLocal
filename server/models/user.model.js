@@ -116,6 +116,11 @@ const User = sequelize.define('user', {
     type: DataTypes.BOOLEAN,
     allowNull: true,
     defaultValue: false
+  },
+  totalGv: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0
   }
 
 });

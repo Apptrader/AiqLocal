@@ -56,10 +56,25 @@ export const handlePayment = async (req, res) => {
 };
 
 export const handleSubscription = async (req, res) => {
-    const { product, name } = req.body;
-    console.log(product, name);
+    const { product, name, customerInfo } = req.body;
+    console.log(product, name, customerInfo);
 
     try {
+
+        let customer;
+
+        // Verificar si el cliente ya existe en Stripe
+        try {
+            customer = await stripe.customers.retrieve(id);
+        } catch (error) {
+            // Si el cliente no existe, crearlo
+            customer = await stripe.customers.create({
+                name: name,
+                email: email,
+                id: id
+            });
+        }
+
         const currentDate = new Date();
         
         // Calcular el final del período de prueba en 30 días
@@ -86,7 +101,6 @@ export const handleSubscription = async (req, res) => {
         res.json(error);
     }
 };
-
  
 
 //CODIGO DEL DEPLOY
